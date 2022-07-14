@@ -14,27 +14,32 @@
 </head>
 
     <body>
-    <!-- Remove this line the first time you edit this file -->
-     <!-- This is the index page of your Django app! -->
-    <!--Add a nav bar here -->
+
+    <!-- nav bar -->
     <nav class="navbar navbar-expand-lg bg-light">
         <div class="container-fluid">
             <a class="navbar-brand">Best Cars</a>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="{% url 'djangoapp:index' %}">Home</a>
+                <a class="nav-link" href="{% url 'djangoapp:index' %}">Home</a>
                 <a class="nav-link" href="{% url 'djangoapp:about' %}">About Us</a>
-                <a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact Us</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'djangoapp:contact' %}">Contact Us</a>
             </div>
           </div>
         </div>
     </nav>
 
     <div class="container-fluid">
-        <p>HOME</p>
+        <div class="card" style="width: 40rem;">
+            <div class="card-header">
+                Contact Information
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Address: XXX St, New York, NY 10000</li>
+              <li class="list-group-item">Phone: (123) 456-7890</li>
+            </ul>
+          </div>
     </div>
-
-    <!--Add a dealer table here -->
 
     </body>
 
