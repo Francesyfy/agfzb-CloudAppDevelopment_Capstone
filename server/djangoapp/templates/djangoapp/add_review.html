@@ -10,7 +10,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 
 </head>
-    <body>
+<body>
+
+    <nav class="navbar navbar-expand-lg bg-light">
+        <div class="container-fluid">
+
+            <a class="navbar-brand">Best Cars</a>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            </div>
+
+        </div>
+    </nav>
+
+
     <!--Add review form here -->
-    </body>
+    <form action="{% url 'djangoapp:add_review' dealer_id %}" method="post">
+        <div class="container"> <!--Style root div with .container class -->
+            {% csrf_token %}
+            <h1>Add Review</h1>
+            <hr>
+            <div class="form-group"> <!--Style second div with .form-group class -->
+                
+                <div class="mb-3">
+                    <label for="content" class="form-label"><b>Enter the review content:</b></label>
+                    <textarea class="form-control" id="content" name="content" rows="2" required></textarea> 
+                </div>
+
+                <div class="mb-3 form-check">
+                    <input class="form-check-input" type="checkbox" name="purchasecheck" id="purchasecheck"> 
+                    <label class="form-check-label" for="purchasecheck">Has purchased the car {{ car.dealership }}?</label>
+                    <div class="form-text">(Select purchased car information below if checked.)</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="car" class="form-label"><b>Select your car:</b></label>
+                    <select name="car" id="car" class="form-select form-select-lg mb-3">
+                        <option value="" selected>model-make-year</option>
+                        {% for car in cars %}
+                            <option value={{car.id}}>{{car.name}}-{{car.car_make.name}}-{{ car.year|date:"Y" }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="purchasedate" class="form-label"><b>Select your purchase date:</b></label>
+                    <input class="date-own form-control" type="text" name="purchasedate" id="purchasedate" placeholder="mm/dd/yyyy">
+                    <script type="text/javascript">
+                        $('.date-own').datepicker({
+                           format: 'mm/dd/yyyy'
+                         });
+                   </script>
+                </div>
+
+                {% if message %}
+                <div class="alert alert-warning"> <!--Style the message paragraph with .alert and .alert-warning class -->
+                    {{ message }}
+                </div>
+                {% endif %}
+                <button class="btn btn-primary" type="submit">Submit</button> <!--Style button with .btn and .btn-primary class -->
+                <button class="btn btn-outline-primary" onclick="history.back()">Go Back</button>
+            </div>
+        </div>
+    </form>
+
+
+</body>
 </html>

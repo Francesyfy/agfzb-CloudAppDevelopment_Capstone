@@ -13,11 +13,6 @@ from ibm_watson.natural_language_understanding_v1 \
 # Create a `get_request` to make HTTP GET requests
 # e.g., response = requests.get(url, params=params, headers={'Content-Type': 'application/json'},
 #                                     auth=HTTPBasicAuth('apikey', api_key))
-
-
-# Create a `post_request` to make HTTP POST requests
-# e.g., response = requests.post(url, params=kwargs, json=payload)
-
 def get_request(url, **kwargs):
     print(kwargs)
     print("GET from {} ".format(url))
@@ -32,6 +27,21 @@ def get_request(url, **kwargs):
     print("With status {} ".format(status_code))
     json_data = json.loads(response.text)
     return json_data
+
+# Create a `post_request` to make HTTP POST requests
+# e.g., response = requests.post(url, params=kwargs, json=payload)
+def post_request(url, json_payload, **kwargs):
+    print(kwargs)
+    print("POST from {} ".format(url))
+    try:
+        response = requests.post(url, params=kwargs, json=json_payload)
+    except:
+        # If any error occurs
+        print("Network exception occurred")
+    status_code = response.status_code
+    print("With status {} ".format(status_code))
+    return response
+
 
 # Create a get_dealers_from_cf method to get dealers from a cloud function
 # def get_dealers_from_cf(url, **kwargs):
@@ -65,17 +75,19 @@ def get_dealers_from_cf(url, **kwargs):
 def get_dealer_reviews_from_cf(url, **kwargs):
     results = []
     # Call get_request with a URL parameter
-    json_result = get_request(url, **kwargs)
-    if json_result:
-        reviews = json_result["body"]["data"]
-        for review_doc in reviews:
-            review_obj = DealerReview(id=review_doc["id"], name=review_doc["name"], dealership=review_doc["dealership"], 
-                                      review=review_doc["review"], purchase=review_doc["purchase"], 
-                                      purchase_date=review_doc["purchase_date"], car_make=review_doc["car_make"], 
-                                      car_model=review_doc["car_model"], car_year=review_doc["car_year"], sentiment="")
-            review_obj.sentiment = analyze_review_sentiments(review_obj.review)
-            results.append(review_obj)
-
+    try:
+        json_result = get_request(url, **kwargs)
+        if json_result:
+            reviews = json_result["body"]["data"]
+            for review_doc in reviews:
+                review_obj = DealerReview(name=review_doc["name"], dealership=review_doc["dealership"], 
+                                        review=review_doc["review"], purchase=review_doc["purchase"], 
+                                        purchase_date=review_doc["purchase_date"], car_make=review_doc["car_make"], 
+                                        car_model=review_doc["car_model"], car_year=review_doc["car_year"], sentiment=None)
+                review_obj.sentiment = analyze_review_sentiments(review_obj.review)
+                results.append(review_obj)
+    except:
+        pass
     return results
 
 
@@ -95,10 +107,13 @@ def analyze_review_sentiments(text):
         authenticator=authenticator)
     natural_language_understanding.set_service_url(url) 
 
-    response = natural_language_understanding.analyze( 
-        text=text,
-        features=Features(sentiment=SentimentOptions(targets=[text]))
-        ).get_result() 
+    try:
+        response = natural_language_understanding.analyze( 
+            text=text,
+            features=Features(sentiment=SentimentOptions(targets=[text]))
+            ).get_result() 
+        sentiment = response['sentiment']['document']['label']
+    except:
+        sentiment = ""
 
-    return response['sentiment']['document']['label'] 
-
+    return sentiment

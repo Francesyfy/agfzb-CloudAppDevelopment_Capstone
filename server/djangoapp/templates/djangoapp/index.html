@@ -53,7 +53,7 @@
 
         </div>
     </nav>
-    
+
     <!-- <div id="nav-placeholder"></div>
     <script>
         $.get("navbar.html", function(data){
@@ -61,12 +61,40 @@
         });
     </script> -->
 
-    <div class="container-fluid">
-        <p>HOME</p>
-    </div>
-
-
     <!--Add a dealer table here -->
+    <div class="container-fluid">
+    <table class="table table-hover" id="table" data-filter-control="true">
+        <thead>
+            <tr>
+                <th data-field="id">ID</th>
+                <th data-field="name">Dealer Name</th>
+                <th data-field="city">City</th>
+                <th data-field="address">Address</th>
+                <th data-field="zip">Zip</th>
+                <th data-field="state" data-filter-control="select">State</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dealer in dealership %}
+                <tr>
+                    <td>{{dealer.id}}</td>
+                    <td><a href="{% url 'djangoapp:dealer_details' dealer.id %}">{{dealer.full_name}}</a></td>
+                    <td>{{dealer.city}}</td>
+                    <td>{{dealer.address}}</td>
+                    <td>{{dealer.zip}}</td>
+                    <td>{{dealer.st}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        $(function() {
+          $('#table').bootstrapTable()
+        })
+      </script>
+      
+    </div>
 
     </body>
 
