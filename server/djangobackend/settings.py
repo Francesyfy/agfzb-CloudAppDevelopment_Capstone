@@ -27,7 +27,12 @@ DEBUG = True
 
 APPEND_SLASH = True
 
-ALLOWED_HOSTS = ["localhost", "fy576.us-south.cf.appdomain.cloud", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "localhost", 
+    "fy576.us-south.cf.appdomain.cloud", 
+    "127.0.0.1", 
+    "fy576-8000.theiadocker-3-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai"
+    ]
 
 
 # Application definition
