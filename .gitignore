@@ -141,4 +141,4 @@ server/djangoapp/migrations/
 server/djangoapp/migrations/
 
 # API
-secret.json
+# secret.json
